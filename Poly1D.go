@@ -182,9 +182,13 @@ func Binary1DPoly(degree int) Poly1D{
 	return NewPoly1D(coeffs, false)
 
 }
-/*
-func Uniform1DPoly(n, degree int) Poly1D{
+
+func Uniform1DPoly(n float64, degree int) Poly1D{
+	coeffs:=make([]float64, degree+1)
+	for i:=0;i<=degree;i++{
+		coeffs[i]=
+	}
+	return NewPoly1D(coeffs, false)
 
 }
 
-*/
