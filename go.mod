@@ -1,4 +1,4 @@
-module github.com/mwaurawakati/polynomial
+module github.com/mwaurawakati/gopolynomial
 
 go 1.18
 

@@ -1,1 +1,1 @@
-package polynomial
+package gopolynomial

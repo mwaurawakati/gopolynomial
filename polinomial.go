@@ -1,4 +1,4 @@
-package polynomial
+package gopolynomial
 
 import (
 		
