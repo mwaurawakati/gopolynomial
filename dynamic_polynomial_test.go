@@ -1,0 +1,8 @@
+package gopolynomial
+
+//import (
+//	"testing"
+//	)
+
+	
+
