@@ -3,6 +3,7 @@ package gopolynomial
 import (
 		"os"
 		"fmt"
+		"math"
 		)
 const(
 	version = "v 0.1.0"
@@ -19,10 +20,10 @@ func cUniqueCombinations(s interface{}, k int) [][]complex128{
 
 		case []complex128:
 			x, _ := s.([]complex128)
-			return ComplexUniqueCombinations(x,k)
+			return complexUniqueCombinations(x,k)
 		case []complex64:
 			x, _ := s.([]complex64)
-			return ComplexUniqueCombinations(x,k)
+			return complexUniqueCombinations(x,k)
 		
 	}
 	r:=make([][]complex128,0)
@@ -33,7 +34,7 @@ func cUniqueCombinations(s interface{}, k int) [][]complex128{
 //combinations 
 
 func intcombinations(n, k int) [][]float64 {
-	combins := Binomial(n, k)
+	combins := binomial(n, k)
 	data := make([][]float64, combins)
 	if len(data) == 0 {
 		return data
@@ -70,7 +71,7 @@ func nextCombination(s []float64, n, k int) {
 //which the combination variables are chosen from
 
 func slicecombinations(s []float64, k int) ([][]float64){
-	combins:=Binomial(len(s),k)
+	combins:=binomial(len(s),k)
 	data:=make([][]float64,combins)
 	if len(data) == 0 {
 		return data
@@ -107,7 +108,7 @@ func slicecombinations(s []float64, k int) ([][]float64){
 
 //FindArraySum return the sum of array variables
 
-func FindArraySum(arr []float64) float64{
+func findArraySum(arr []float64) float64{
    var res float64
    res=0
    for i:=0; i<len(arr); i++ {
@@ -117,7 +118,7 @@ func FindArraySum(arr []float64) float64{
 }
 
 
-func ComplexArraySum(arr []complex128) complex128{
+func complexArraySum(arr []complex128) complex128{
 	var res complex128
 	res = 0 +0i
 	for i:=0; i<len(arr); i++{
@@ -125,7 +126,7 @@ func ComplexArraySum(arr []complex128) complex128{
 	}
 	return res
 }
-func FindArrayProduct(arr []float64) float64{
+func findArrayProduct(arr []float64) float64{
    var res float64
    res=1
    for i:=0; i<len(arr); i++ {
@@ -133,7 +134,7 @@ func FindArrayProduct(arr []float64) float64{
    }
    return res
 }
-func ComplexArrayProduct(arr []complex128) complex128{
+func complexArrayProduct(arr []complex128) complex128{
 	  var res complex128
     res=1
     for i:=0; i<len(arr); i++ {
@@ -141,7 +142,7 @@ func ComplexArrayProduct(arr []complex128) complex128{
     }
     return res
 }
-func Product2DArray(arr [][]float64) float64{
+func product2DArray(arr [][]float64) float64{
 	var res float64
 	res=1
 	for i:=0; i<len(arr); i++ {
@@ -150,7 +151,7 @@ func Product2DArray(arr [][]float64) float64{
 	return res
 }
 
-func Binomial(n, k int) int {
+func binomial(n, k int) int {
 
 
 	/* Binomial returns the binomial coefficient of (n,k), also commonly referred to
@@ -182,7 +183,7 @@ func Binomial(n, k int) int {
 	return b
 }
 
-func UniqueCombinations(s interface{}, k int) [][]float64{
+func uniqueCombinations(s interface{}, k int) [][]float64{
 	switch s.(type) {
 		case int:
 			x, _ := s.(int)
@@ -203,7 +204,7 @@ func UniqueCombinations(s interface{}, k int) [][]float64{
 
 
 
-func ComplexUniqueCombinations(s interface{}, k int) ([][]complex128){
+func complexUniqueCombinations(s interface{}, k int) ([][]complex128){
 	s1 := []complex128{}
 	switch s.(type){
 		case []complex128:
@@ -221,7 +222,7 @@ func ComplexUniqueCombinations(s interface{}, k int) ([][]complex128){
 			os.Exit(0)
 	}
 	
-	combins:=Binomial(len(s1),k)
+	combins:=binomial(len(s1),k)
 	data:=make([][]complex128,combins)
 	if len(data) == 0 {
 		return data
@@ -256,7 +257,7 @@ func ComplexUniqueCombinations(s interface{}, k int) ([][]complex128){
 	return data
 }	
 
-func Normalize1DCoeffs(arr []float64) []float64{
+func normalize1DCoeffs(arr []float64) []float64{
 	if arr[0] != 1{
 		num:=arr[0]
 		for i,val := range arr{
@@ -283,7 +284,7 @@ func (slice intSlice) pos(value float64) int {
   CombinationOneSeries helps to come up with posion of ones in the companion matrix
 */
 		
-func CompanionOneSeries(n int) []int{
+func companionOneSeries(n int) []int{
 	if n<2{
 		panic(errWrongPolinomial)
 	}
@@ -314,12 +315,42 @@ func polymul(array1, array2 []float64) []float64{
 	return prod
 }
 
-func Version(){
+func vversion(){
 	fmt.Print(version)
 	}
-func About(){
+func aabout(){
 	fmt.Println("\nThis is gopolinomial version: ", version)
 	fmt.Println("Author                      : ", author)
 	fmt.Println("Licence                     : ", licence)
 	fmt.Println(about,"\n")
+}
+
+
+//Linspace is a utility function similar to python's numpy linspace
+//Given the start, stop, the number of values to be retuned and whether
+//the endpoint should be included or not
+func Linspace(start,stop float64,num int,endpoint bool) []float64{
+	var total float64
+	if start<0{
+		total=math.Abs(start)+stop
+	}else{
+		total=stop-start
+	}
+	nums:=make([]float64,num)
+	if endpoint==false{
+		step:=total/float64(num)
+		for i,_ :=range nums{
+			nums[i]=start+step*float64(i)
+		}
+		nums[0]=start
+		return nums
+
+	}else{
+		step:=total/float64(num-1)
+		for i,_ :=range nums{
+			nums[i]=start+step*float64(i)
+		}
+		nums[0]=start
+		return nums
+	}
 }

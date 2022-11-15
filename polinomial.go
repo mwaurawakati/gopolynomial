@@ -17,7 +17,9 @@ const (
 	errZero					= "Polynomial: The array can not be empty"
 )
 
-	
+//PolyCoefficients returns a slice if length degree+1 of a polynomial's coefficients
+//once given the roots of a polynomial. The roots might be a slice of complex128, complex64
+//or float64	
 func PolyCoefficients(roots interface{}) ([]float64){
 
 	/*This function returns the coefficients given the roots of the polinomial
@@ -40,10 +42,10 @@ func PolyCoefficients(roots interface{}) ([]float64){
 	
 			for i:=1;i<=l;i++{
 				coef =float64(0)
-				p:=UniqueCombinations(x, i)
+				p:=uniqueCombinations(x, i)
 				for j:=0;j<len(p);j++{
 					arr:=p[j]
-					prod:=FindArrayProduct(arr)
+					prod:=findArrayProduct(arr)
 					coef += prod
 				}
 			
@@ -67,7 +69,7 @@ func PolyCoefficients(roots interface{}) ([]float64){
 				p:=cUniqueCombinations(x, i)
 				for j:=0;j<len(p);j++{
 					arr:=p[j]
-					prod:=ComplexArrayProduct(arr)
+					prod:=complexArrayProduct(arr)
 					coef += prod
 				}
 			
@@ -91,7 +93,7 @@ func PolyCoefficients(roots interface{}) ([]float64){
 				p:=cUniqueCombinations(x, i)
 				for j:=0;j<len(p);j++{
 					arr:=p[j]
-					prod:=ComplexArrayProduct(arr)
+					prod:=complexArrayProduct(arr)
 					coef += prod
 				}
 			
@@ -104,6 +106,9 @@ func PolyCoefficients(roots interface{}) ([]float64){
 	}
 	return c
 }
+
+
+//PolyRoots returns an slice of complex128 containing the roots of a polynomial
 func PolyRoots(coeffs []float64) []complex128{
 	/*
 	This function returns the roots given the coefficients
@@ -117,7 +122,7 @@ func PolyRoots(coeffs []float64) []complex128{
 	}
 	
 	
-	c:=CompanionMatrix(coeffs)
+	c:=companionMatrix(coeffs)
 	a := mat.NewDense(len(coeffs)-1,len(coeffs)-1,c)
 	var eig mat.Eigen
 	eig.Factorize(a, mat.EigenLeft)
@@ -126,17 +131,16 @@ func PolyRoots(coeffs []float64) []complex128{
 
 
 
-
+//PolyMul finds the product of two polynomials and returns type Poly1D
+//This function multiplies two polinomials;A and B
+//params:
+//array1: a 1D array of the first polinomial's roots or coefficients, or Poly1D
+//array2: a 1D array of the 2nd polinomial's roots of coefficients, or PolY1D
+//r:specifies the type of input, i.e p/poly1D/poly or r/roots or c/coef/coefficients
+//returns:
+//The resulting poly1D
 func PolyMul(array1, array2 interface{}, t string) Poly1D{
-	/*
-		This function multiplies two polinomials;A and B
-		params:
-		array1: a 1D array of the first polinomial's roots or coefficients, or Poly1D
-		array2: a 1D array of the 2nd polinomial's roots of coefficients, or PolY1D
-		r:specifies the type of input, i.e p/poly1D/poly or r/roots or c/coef/coefficients
-		returns:
-		The resulting poly1D
-	*/
+	
 	var poly Poly1D
 	t=strings.ToLower(t)
 	if t=="c"||t=="coef"||t=="coeffs"||t=="coefficients"||t=="coefficient"{
@@ -161,6 +165,12 @@ func PolyMul(array1, array2 interface{}, t string) Poly1D{
 		
 }
 
+//PolyDiv finds the product of two polynomials and returns quotient and mod
+//This function multiplies two polinomials;A and B
+//params:
+//array1: a 1D array of the first polinomial's coefficients
+//array2: a 1D array of the 2nd polinomial's coefficients,
+//returns:The slice of float64 quotient and slice of float64 remainder
 func PolyDiv(array1,array2 []float64) ([]float64,[]float64){
 	if len(array1)  == 0 {
 		panic("division by zero")
@@ -225,7 +235,7 @@ func PolyDiv(array1,array2 []float64) ([]float64,[]float64){
 
 
 
-func CompanionMatrix(coeffs []float64) []float64{
+func companionMatrix(coeffs []float64) []float64{
 	var comp []float64
 	if len(coeffs)<=2{
 		fmt.Println("A companion matrix can not be created."+
@@ -251,7 +261,7 @@ func CompanionMatrix(coeffs []float64) []float64{
 		comp[i]=float64(-1)*coeffs[j]
 		i=i+1
 	}
-	index := CompanionOneSeries(len(coeffs)-1)
+	index := companionOneSeries(len(coeffs)-1)
 	for _, val := range index{
 		comp[val]=float64(1)
 	}
@@ -259,7 +269,7 @@ func CompanionMatrix(coeffs []float64) []float64{
 	return comp
 }
 	
-	
+
 
 
 
